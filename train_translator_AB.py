@@ -55,7 +55,7 @@ if __name__ == '__main__':
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
     translator = DistillNet(num_iblocks=6, num_ops=4)
-    translator.load_state_dict(torch.load("./loaded_models/gen_sh2f.pth"))
+    translator.load_state_dict(torch.load("./loaded_models/gen_sh2f_mapped.pth"))
     translator = translator.to(device)
       
     print("USING CUDA FOR MODEL TRAINING")
