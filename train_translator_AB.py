@@ -14,7 +14,7 @@ from torchvision import transforms
 import numpy as np
 import wandb
 
-# os.environ['TORCH_HOME'] = "./loaded_models/"
+os.environ['TORCH_HOME'] = "./loaded_models/"
 
 if __name__ == '__main__':
     # parse CLI arguments
