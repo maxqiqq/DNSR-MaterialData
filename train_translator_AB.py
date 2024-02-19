@@ -70,9 +70,9 @@ if __name__ == '__main__':
    
     Tensor = torch.cuda.FloatTensor
 
-    train_set = PairedImageSet('./dataset', 'train', use_mask=False, aug=False)
+    train_set = PairedImageSet('./MaterialData', 'train', use_mask=False, aug=False)
                                # size=(opt.img_height, opt.img_width)
-    validation_set = PairedImageSet('./dataset', 'validation', use_mask=False, aug=False)
+    validation_set = PairedImageSet('./MaterialData', 'validation', use_mask=False, aug=False)
 
     dataloader = DataLoader(
         train_set,  
