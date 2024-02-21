@@ -44,7 +44,7 @@ if __name__ == '__main__':
     parser.add_argument("--save_checkpoint", type=int, default=2, help="checkpoint for visual inspection")
     opt = parser.parse_args()
 
-    wandb.init(project="DNSR+MaterialData", config=vars(opt))
+    wandb.init(project="DNSR-MaterialData", config=vars(opt))
     wandb.config.update(opt)
 
     print('CUDA: ', torch.cuda.is_available(), torch.cuda.device_count())
