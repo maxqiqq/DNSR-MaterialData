@@ -201,7 +201,7 @@ if __name__ == '__main__':
                                         
                                         # A_img_numpy = A_img.cpu().numpy()  AB_mask_numpy = AB_mask.cpu().numpy()  orig = Image.fromarray(A_img_numpy[0])  msk = Image.fromarray(AB_mask_numpy[0])
                                         B_img_numpy = B_img.cpu().numpy()
-                                        albedo = Image.fromarray(B_img_numpy[0]) 
+                                        albedo = Image.fromarray(B_img_numpy[0].astype(np.uint8))
                                         images = [
                                             wandb.Image(albedo, caption="albedo"),
                                             wandb.Image(fullout, caption="prediction"),
