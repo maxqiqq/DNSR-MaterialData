@@ -32,8 +32,6 @@ if __name__ == '__main__':
     parser.add_argument("--decay_steps", type=int, default=2, help="number of step decays")
 
     parser.add_argument("--n_cpu", type=int, default=2, help="number of cpu threads to use during batch generation")
-    # parser.add_argument("--img_height", type=int, default=2048, help="size of image height")
-    # parser.add_argument("--img_width", type=int, default=2048, help="size of image width")
     parser.add_argument("--channels", type=int, default=3, help="number of image channels")
 
     parser.add_argument("--pixelwise_weight", type=float, default=1.0, help="Pixelwise loss weight")
@@ -62,7 +60,6 @@ if __name__ == '__main__':
     translator.cuda()
     criterion_pixelwise.cuda()
 
-    # optimizer_G.load_state_dict(torch.load("./loaded_models/dnsr_wsrd_checkpoint/optimizer_ABG.pth"))
     optimizer_G = torch.optim.Adam(translator.parameters(), lr=opt.lr, betas=(opt.b1, opt.b2))
     decay_step = (opt.n_epochs - opt.decay_epoch) // opt.decay_steps
     milestones = [me for me in range(opt.decay_epoch, opt.n_epochs, decay_step)] 
@@ -71,7 +68,6 @@ if __name__ == '__main__':
     Tensor = torch.cuda.FloatTensor
 
     train_set = PairedImageSet('./MaterialData', 'train', use_mask=False, aug=False)
-                               # size=(opt.img_height, opt.img_width)
     validation_set = PairedImageSet('./MaterialData', 'validation', use_mask=False, aug=False)
 
     dataloader = DataLoader(
@@ -92,14 +88,11 @@ if __name__ == '__main__':
     val_samples = len(val_dataloader)
 
     best_rmse = 600
-    # valid_table_data = []
-    # train_table_data = []
 
     wandb.define_metric("Epoch")
     wandb.define_metric("train/*", step_metric="Epoch")
     wandb.define_metric("valid/*", step_metric="Epoch")
     wandb.define_metric("err/*", step_metric="Epoch")
-
     # wandb.define_metric("train/loss_epoch", summary="min")
     # wandb.define_metric("err/rmse_epoch", summary="min")
         
@@ -138,10 +131,9 @@ if __name__ == '__main__':
                     mask = AB_mask[:, :, upper:lower, left:right]
                     inp = A_img[:, :, upper:lower, left:right]
 
-                    # 将每个块送入网络模型进行训练,输出结果     
+                    # 将每个块送入网络模型进行训练,输出结果      
                     optimizer_G.zero_grad()
-                    out = translator(inp, mask)
-                    # mask计算中使用的otsu方法计算阴影遮罩mask不太靠谱吧。。。。
+                    out = translator(inp, mask) # mask计算中使用的otsu方法计算阴影遮罩mask不太靠谱吧。。。。
                         
                     # 模仿源文件，设计一系列loss计算
                     synthetic_mask = compute_shadow_mask_otsu(inp, out.clone().detach())
@@ -159,10 +151,8 @@ if __name__ == '__main__':
 
             # 一个batch后更新模型参数
             optimizer_G.step()
-
-        # train_table_data.append([epoch, train_epoch_loss, train_epoch_pix_loss, train_epoch_perc_loss, train_epoch_mask_loss]) # 一个epoch结束
         
-        wandb.log({  # log是画出曲线图
+        wandb.log({
              "train/loss_epoch": train_epoch_loss,
              "train/mask_loss_epoch": train_epoch_mask_loss,
              "train/pix_loss_epoch": train_epoch_pix_loss,
@@ -223,8 +213,7 @@ if __name__ == '__main__':
                             perceptual_loss = pl.compute_perceptual_loss_v(out.detach(), gt.detach())
                             loss_G = opt.pixelwise_weight * loss_pixel + opt.perceptual_weight * perceptual_loss + opt.mask_weight * mask_loss
 
-                            rmse, psnr = analyze_image_pair_rgb(out.squeeze(0), gt.squeeze(0))
-                            re, _ = analyze_image_pair(out.squeeze(0), gt.squeeze(0))
+                            rmse, psnr = analyze_image_pair_lab(out.squeeze(0), gt.squeeze(0))
 
                             # 计算每一块的tile_loss之和，遍历所有val_pic的所有16 tiles
                             valid_epoch_loss += loss_G.detach().item()
@@ -232,23 +221,14 @@ if __name__ == '__main__':
                             valid_pix_loss += loss_pixel.detach().item()
                             valid_perc_loss += perceptual_loss.detach().item()
 
-                            err_epoch += re
                             err_rmse_epoch += rmse
                             err_psnr_epoch += psnr
-
-                # err_epoch /= val_samples
-                # err_rmse_epoch /= val_samples
-                # err_psnr_epoch /= val_samples
-
-                # valid_table_data.append(
-                #     [epoch, valid_epoch_loss, valid_pix_loss, valid_perc_loss, valid_mask_loss, err_epoch, err_rmse_epoch, err_psnr_epoch])
 
                 wandb.log({
                      "valid/loss_epoch": valid_epoch_loss,
                      "valid/mask_loss_epoch": valid_mask_loss,
                      "valid/pix_loss_epoch": valid_pix_loss,
                      "valid/perc_loss_epoch": valid_perc_loss,
-                     "err/epoch":  err_epoch,
                      "err/rmse_epoch":  err_rmse_epoch,
                      "err/psnr_epoch":  err_psnr_epoch,
                      "Epoch": epoch
@@ -257,8 +237,7 @@ if __name__ == '__main__':
         print("EPOCH: {} - LOSS: {:.3f} | {:.3f} - MskLoss: {:.3f} | {:.3f} - RMSE {:.3f} - PSNR - {:.3f}".format(
                                                                                     epoch, train_epoch_loss,
                                                                                     valid_epoch_loss, train_epoch_mask_loss,
-                                                                                    valid_mask_loss,
-                                                                                    err_rmse_epoch,  err_psnr_epoch))
+                                                                                    valid_mask_loss, err_rmse_epoch,  err_psnr_epoch))
         
         if err_rmse_epoch < best_rmse and epoch > 1:
             best_rmse = err_rmse_epoch
@@ -266,11 +245,3 @@ if __name__ == '__main__':
             torch.save(translator.cpu().state_dict(), "./best_rmse_model/distillnet_epoch{}.pth".format(epoch))
             torch.save(optimizer_G.state_dict(), "./best_rmse_model/optimizer_epoch{}.pth".format(epoch))
             wandb.config.update({"best_rmse": best_rmse}, allow_val_change=True)
-
-
-    # train_table = wandb.Table(data=train_table_data, columns=["Epoch", "Train_Epoch_Loss", "Train_Epoch_Pix_Loss", "Train_Epoch_Perc_Loss", "Train_Epoch_Mask_Loss"])
-    # wandb.log({"Train Epoch Loss Table": train_table})
-    # valid_table = wandb.Table(data=valid_table_data, columns=["Epoch", "Valid_Epoch_Loss", "Valid_Epoch_Pix_Loss",
-    #                                                     "Valid_Epoch_Perc_Loss", "Valid_Epoch_Mask_Loss",
-    #                                                     "Err_Epoch", "Err_RMSE_Epoch", "Err_PSNR_Epoch"])
-    # wandb.log({"Valid Epoch Loss&Error Table": valid_table})
