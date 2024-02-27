@@ -67,38 +67,38 @@ def compute_otsu_mask(img, img_free):  # 和上面的compute_loader_otsu_mask有
 #     return lab_img
 
 
-def analyze_image_pair(synthetic_image, expected_image):
-    synthetic_image = synthetic_image.detach().cpu().data
-    expected_image = expected_image.detach().cpu().data
+# def analyze_image_pair(synthetic_image, expected_image):
+#     synthetic_image = synthetic_image.detach().cpu().data
+#     expected_image = expected_image.detach().cpu().data
 
-    mse_loss = F.mse_loss(synthetic_image, expected_image)
-    rmse_loss = torch.sqrt(mse_loss).item()
-    psnr = 20 * log10(1 / rmse_loss)
-    return rmse_loss, psnr
-
-
-def analyze_image_pair_rgb(synthetic_image, expected_image):
-    synthetic_image = 255.0 * synthetic_image.detach().cpu().data
-    expected_image = 255.0 * expected_image.detach().cpu().data
-
-    mse_loss = F.mse_loss(synthetic_image, expected_image)
-    rmse_loss = torch.sqrt(mse_loss).item()
-    psnr = 20 * log10(255 / rmse_loss)
-    return rmse_loss, psnr
-
-
-# def analyze_image_pair_lab(synthetic_image, expected_image):
-#     synthetic_image = (255. * synthetic_image.detach().cpu().numpy()).astype(np.uint8)  # 通过astype()强制转化数据类型
-#     expected_image = (255. * expected_image.detach().cpu().numpy()).astype(np.uint8)
-
-#     lab_syn_img = rgb2lab(synthetic_image)
-#     lab_gt_img = rgb2lab(expected_image)
-
-#     mse_loss = mean_squared_error(lab_syn_img, lab_gt_img)
-#     rmse_loss = np.sqrt(mse_loss)
-
-#     psnr = psnr_lab(lab_syn_img, lab_gt_img)
+#     mse_loss = F.mse_loss(synthetic_image, expected_image)
+#     rmse_loss = torch.sqrt(mse_loss).item()
+#     psnr = 20 * log10(1 / rmse_loss)
 #     return rmse_loss, psnr
+
+
+# def analyze_image_pair_rgb(synthetic_image, expected_image):
+#     synthetic_image = 255.0 * synthetic_image.detach().cpu().data
+#     expected_image = 255.0 * expected_image.detach().cpu().data
+
+#     mse_loss = F.mse_loss(synthetic_image, expected_image)
+#     rmse_loss = torch.sqrt(mse_loss).item()
+#     psnr = 20 * log10(255 / rmse_loss)
+#     return rmse_loss, psnr
+
+
+def analyze_image_pair_lab(synthetic_image, expected_image):
+    synthetic_image = (255. * synthetic_image.detach().cpu().numpy()).astype(np.uint8)  # 通过astype()强制转化数据类型
+    expected_image = (255. * expected_image.detach().cpu().numpy()).astype(np.uint8)
+
+    lab_syn_img = rgb2lab(synthetic_image)
+    lab_gt_img = rgb2lab(expected_image)
+
+    mse_loss = mean_squared_error(lab_syn_img, lab_gt_img)
+    rmse_loss = np.sqrt(mse_loss)
+
+    psnr = psnr_lab(lab_syn_img, lab_gt_img)
+    return rmse_loss, psnr
 
 
 # def compute_shadow_mask(shadow_image, shadow_free_image):
