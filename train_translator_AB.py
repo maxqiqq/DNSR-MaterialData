@@ -233,9 +233,9 @@ if __name__ == '__main__':
              "val/mask_loss": val_mask_loss,
              "val/pix_loss": val_pix_loss,
              "val/perc_loss": val_perc_loss,
-             "main/rmse":  err_rmse,
-             "main/psnr":  err_psnr,
-             "main/Train vs. Val Loss": table
+             "main/rmse": err_rmse,
+             "main/psnr": err_psnr,
+             "main/Train vs. Val Loss": table, 
              "Epoch": epoch
         })
 
