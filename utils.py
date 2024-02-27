@@ -42,7 +42,7 @@ def compute_otsu_mask(img, img_free):  # 和上面的compute_loader_otsu_mask有
     return mask
 
 
-def rescale_lab(lab_img):  # 看不懂？？？？？？？
+def rescale_lab(lab_img):
     lab_img[:, :, 0] *= 255.0/100.0
     lab_img[:, :, 1] = (lab_img[:, :, 1] + 127.0)
     lab_img[:, :, 2] = (lab_img[:, :, 2] + 127.0)
