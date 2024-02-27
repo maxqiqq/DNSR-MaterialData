@@ -6,7 +6,7 @@ from loss import PerceptualLossModule
 from torch.optim.lr_scheduler import MultiStepLR  
 from torch.utils.data import DataLoader
 from torchvision.utils import save_image
-from utils import analyze_image_pair_lab, compute_shadow_mask_otsu
+from utils import rescale_lab, analyze_image_pair_lab, compute_shadow_mask_otsu
 import os  
 import gc
 from PIL import Image
