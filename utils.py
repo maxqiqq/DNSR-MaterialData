@@ -42,11 +42,11 @@ def compute_otsu_mask(img, img_free):  # 和上面的compute_loader_otsu_mask有
     return mask
 
 
-# def rescale_lab(lab_img):  # 看不懂？？？？？？？
-#     lab_img[:, :, 0] *= 255.0/100.0
-#     lab_img[:, :, 1] = (lab_img[:, :, 1] + 127.0)
-#     lab_img[:, :, 2] = (lab_img[:, :, 2] + 127.0)
-#     return lab_img
+def rescale_lab(lab_img):  # 看不懂？？？？？？？
+    lab_img[:, :, 0] *= 255.0/100.0
+    lab_img[:, :, 1] = (lab_img[:, :, 1] + 127.0)
+    lab_img[:, :, 2] = (lab_img[:, :, 2] + 127.0)
+    return lab_img
 
 
 def psnr_lab(lab_img_out, lab_img_gt):  # 计算psnr峰值信噪比
