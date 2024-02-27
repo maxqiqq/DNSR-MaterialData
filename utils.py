@@ -49,11 +49,11 @@ def compute_otsu_mask(img, img_free):  # 和上面的compute_loader_otsu_mask有
 #     return lab_img
 
 
-# def psnr_lab(lab_img_out, lab_img_gt):  # 计算psnr峰值信噪比
-#     lab_img_gt = rescale_lab(lab_img_gt)
-#     lab_img_out = rescale_lab(lab_img_out)
-#     rmse = np.sqrt(mean_squared_error(lab_img_gt, lab_img_out))
-#     return 20 * log10(255 / rmse)
+def psnr_lab(lab_img_out, lab_img_gt):  # 计算psnr峰值信噪比
+    lab_img_gt = rescale_lab(lab_img_gt)
+    lab_img_out = rescale_lab(lab_img_out)
+    rmse = np.sqrt(mean_squared_error(lab_img_gt, lab_img_out))
+    return 20 * log10(255 / rmse)
 
 
 # def rgb2gray(image):
@@ -61,10 +61,10 @@ def compute_otsu_mask(img, img_free):  # 和上面的compute_loader_otsu_mask有
 #     return 0.299 * rgb_image[0, :, :] + 0.587 * rgb_image[1, :, :] + 0.114 * rgb_image[2, :, :]
 
 
-# def rgb2lab(numpy_rgb_img):
-#     numpy_rgb_img = numpy_rgb_img.transpose((2, 1, 0))
-#     lab_img = color.rgb2lab(numpy_rgb_img)
-#     return lab_img
+def rgb2lab(numpy_rgb_img):
+    numpy_rgb_img = numpy_rgb_img.transpose((2, 1, 0))
+    lab_img = color.rgb2lab(numpy_rgb_img)
+    return lab_img
 
 
 # def analyze_image_pair(synthetic_image, expected_image):
