@@ -226,8 +226,7 @@ if __name__ == '__main__':
                             err_rmse += rmse
                             err_psnr += psnr
 
-        table_data.append(
-            [epoch, train_loss, val_loss])
+        table_data.append([epoch, train_loss, val_loss])
         table = wandb.Table(data=table_data, columns=["Epoch", "train_loss", "val_loss"])
         wandb.log({
              # "val/loss": val_loss,
@@ -240,9 +239,9 @@ if __name__ == '__main__':
              "Epoch": epoch
         })
 
-        print("EPOCH: {} - LOSS: {:.3f} | {:.3f} - MskLoss: {:.3f} | {:.3f} - RMSE {:.3f} - PSNR - {:.3f}".format(
-                                                                                    epoch, train_loss, val_loss, train_mask_loss,
-                                                                                    val_mask_loss, err_rmse,  err_psnr))
+        print("EPOCH{} - LOSS: {:.3f}  |  {:.3f} - RMSE {:.3f} - PSNR {:.3f} - MskLoss: {:.3f}  |  {:.3f} ".format(
+                                                                                    epoch, train_loss, val_loss, err_rmse, err_psnr,
+                                                                                    train_mask_loss, val_mask_loss))
         
         # if _rmse < best_rmse and epoch > 1:
         #     best_rmse = _rmse
