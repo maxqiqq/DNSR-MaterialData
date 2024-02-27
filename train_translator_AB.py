@@ -84,14 +84,16 @@ if __name__ == '__main__':
         num_workers=opt.n_cpu
     )
 
-    num_samples = len(dataloader)
-    val_samples = len(val_dataloader)
-
+    # num_samples = len(dataloader)
+    # val_samples = len(val_dataloader)
+    
+    table_data = []
     wandb.define_metric("Epoch")
     wandb.define_metric("train/*", step_metric="Epoch")
     wandb.define_metric("val/*", step_metric="Epoch")
-    wandb.define_metric("err/*", step_metric="Epoch")
-    wandb.define_metric("err/rmse", summary="min")
+    # wandb.define_metric("err/*", step_metric="Epoch")
+    wandb.define_metric("main/*", step_metric="Epoch")
+    wandb.define_metric("main/rmse", summary="min")
     # wandb.define_metric("train/loss", summary="min")
     # best_rmse = 600
         
@@ -151,7 +153,7 @@ if __name__ == '__main__':
             optimizer_G.step()
         
         wandb.log({
-             "train/loss": train_loss,
+             # "train/loss": train_loss,
              "train/mask_loss": train_mask_loss,
              "train/pix_loss": train_pix_loss,
              "train/perc_loss": train_perc_loss,
@@ -224,25 +226,26 @@ if __name__ == '__main__':
                             err_rmse += rmse
                             err_psnr += psnr
 
-                wandb.log({
-                     "val/loss": val_loss,
-                     "val/mask_loss": val_mask_loss,
-                     "val/pix_loss": val_pix_loss,
-                     "val/perc_loss": val_perc_loss,
-                     "err/rmse":  err_rmse,
-                     "err/psnr":  err_psnr,
-                     "Epoch": epoch
-                })
-
-        wandb.log({"pr": wandb.plot.pr_curve(train_loss, val_loss)})
-        # wandb.plot.line(x="Epoch", y=["train/loss", "val/loss"], title="Train vs. Val Loss")
+        table_data.append(
+            [epoch, train_loss, val_loss])
+        table = wandb.Table(data=table_data, columns=["Epoch", "train_loss", "val_loss"])
+        wandb.log({
+             # "val/loss": val_loss,
+             "val/mask_loss": val_mask_loss,
+             "val/pix_loss": val_pix_loss,
+             "val/perc_loss": val_perc_loss,
+             "main/rmse":  err_rmse,
+             "main/psnr":  err_psnr,
+             "main/Train vs. Val Loss": table
+             "Epoch": epoch
+        })
 
         print("EPOCH: {} - LOSS: {:.3f} | {:.3f} - MskLoss: {:.3f} | {:.3f} - RMSE {:.3f} - PSNR - {:.3f}".format(
                                                                                     epoch, train_loss, val_loss, train_mask_loss,
                                                                                     val_mask_loss, err_rmse,  err_psnr))
         
-        # if err_rmse < best_rmse and epoch > 1:
-        #     best_rmse = err_rmse
+        # if _rmse < best_rmse and epoch > 1:
+        #     best_rmse = _rmse
         #     wandb.config.update({"best_rmse": best_rmse}, allow_val_change=True)
         #     print("Saving checkpoint for epoch {} and RMSE {}".format(epoch, best_rmse))
         #     torch.save(translator.cpu().state_dict(), "./best_rmse_model/distillnet_epoch{}.pth".format(epoch))
