@@ -234,7 +234,8 @@ if __name__ == '__main__':
                      "Epoch": epoch
                 })
 
-        wandb.plot.line(x="Epoch", y=["train/loss", "val/loss"], title="Train vs. Val Loss")
+        wandb.log({"pr": wandb.plot.pr_curve(train_loss, val_loss)})
+        # wandb.plot.line(x="Epoch", y=["train/loss", "val/loss"], title="Train vs. Val Loss")
 
         print("EPOCH: {} - LOSS: {:.3f} | {:.3f} - MskLoss: {:.3f} | {:.3f} - RMSE {:.3f} - PSNR - {:.3f}".format(
                                                                                     epoch, train_loss, val_loss, train_mask_loss,
