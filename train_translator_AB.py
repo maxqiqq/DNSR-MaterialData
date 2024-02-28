@@ -19,7 +19,7 @@ os.environ['TORCH_HOME'] = "./loaded_models/"
 if __name__ == '__main__':
     # parse CLI arguments
     parser = argparse.ArgumentParser()
-    parser.add_argument("--n_epochs", type=int, default=15, help="number of epochs of training")
+    parser.add_argument("--n_epochs", type=int, default=50, help="number of epochs of training")
     parser.add_argument("--resume_epoch", type=int, default=1, help="epoch to resume training")  # 重载训练，从之前中断处接着
     parser.add_argument("--batch_size", type=int, default=1, help="size of the batches")
 
@@ -29,15 +29,15 @@ if __name__ == '__main__':
     parser.add_argument("--b2", type=float, default=0.999, help="adam: decay of first order momentum of gradient") # GPT说常默认0.999
     parser.add_argument("--gamma", type=float, default=0.2, help="adam: 学习率衰减的乘数")
 
-    parser.add_argument("--decay_epoch", type=int, default=8, help="epoch from which to start lr decay")
-    parser.add_argument("--decay_steps", type=int, default=2, help="number of step decays")
+    parser.add_argument("--decay_epoch", type=int, default=20, help="epoch from which to start lr decay")
+    parser.add_argument("--decay_steps", type=int, default=5, help="number of step decays")
 
     parser.add_argument("--n_cpu", type=int, default=2, help="number of cpu threads to use during batch generation")
     parser.add_argument("--channels", type=int, default=3, help="number of image channels")
 
     parser.add_argument("--pixelwise_weight", type=float, default=1.0, help="Pixelwise loss weight")
     parser.add_argument("--perceptual_weight", type=float, default=0.1, help="Perceptual loss weight")
-    parser.add_argument("--mask_weight", type=float, default=0.05, help="mask loss weight")
+    parser.add_argument("--mask_weight", type=float, default=0.02, help="mask loss weight")
 
     parser.add_argument("--val_checkpoint", type=int, default=1, help="checkpoint for validation")
     parser.add_argument("--save_checkpoint", type=int, default=10, help="checkpoint for visual inspection") # valdataset中每个几个保存一下图片，尽量减少计算
