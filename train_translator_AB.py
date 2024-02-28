@@ -23,6 +23,7 @@ if __name__ == '__main__':
     parser.add_argument("--resume_epoch", type=int, default=1, help="epoch to resume training")  # 重载训练，从之前中断处接着
     parser.add_argument("--batch_size", type=int, default=1, help="size of the batches")
 
+    parser.add_argument("--optimizer", type=str, default="adam", help="['adam']adam ['sgd']sgd")
     parser.add_argument("--lr", type=float, default=0.0002, help="adam: learning rate")
     parser.add_argument("--b1", type=float, default=0.5, help="adam: decay of first order momentum of gradient")
     parser.add_argument("--b2", type=float, default=0.999, help="adam: decay of first order momentum of gradient")
@@ -60,7 +61,11 @@ if __name__ == '__main__':
     translator.cuda()
     criterion_pixelwise.cuda()
 
-    optimizer_G = torch.optim.Adam(translator.parameters(), lr=opt.lr, betas=(opt.b1, opt.b2))
+    if opt.optimizer == "adam":
+        optimizer_G = torch.optim.Adam(translator.parameters(), lr=opt.lr, betas=(opt.b1, opt.b2))
+    elif opt.optimizer == "sgd":
+        optimizer_G = torch.optim.SGD(translator.parameters(), lr=opt.lr, momentum=0.9)
+
     decay_step = (opt.n_epochs - opt.decay_epoch) // opt.decay_steps
     milestones = [me for me in range(opt.decay_epoch, opt.n_epochs, decay_step)] 
     scheduler = MultiStepLR(optimizer_G, milestones=milestones, gamma=opt.gamma)
