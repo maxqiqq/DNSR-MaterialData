@@ -80,7 +80,7 @@ if __name__ == '__main__':
     val_dataloader = DataLoader(
         val_set,
         batch_size=1,
-        shuffle=False,
+        shuffle=True,
         num_workers=opt.n_cpu
     )
 
@@ -228,6 +228,7 @@ if __name__ == '__main__':
 
         table_data.append([epoch, train_loss, val_loss])
         table = wandb.Table(data=table_data, columns=["Epoch", "train_loss", "val_loss"])
+        table_line = wandb.plot.line(table, x='Epoch', y1='train_loss',  y2='val_loss', title='Train vs. Val Loss')
         wandb.log({
              # "val/loss": val_loss,
              "val/mask_loss": val_mask_loss,
@@ -235,11 +236,11 @@ if __name__ == '__main__':
              "val/perc_loss": val_perc_loss,
              "main/rmse": err_rmse,
              "main/psnr": err_psnr,
-             "main/Train vs. Val Loss": table, 
+             "main/Train vs. Val Loss": table_line, 
              "Epoch": epoch
         })
 
-        print("EPOCH{} - LOSS: {:.3f}  |  {:.3f} - RMSE {:.3f} - PSNR {:.3f} - MskLoss: {:.3f}  |  {:.3f} ".format(
+        print("EPOCH{}  -  LOSS: {:.3f} | {:.3f}  -  RMSE {:.3f}  -  PSNR {:.3f}  -  MskLoss: {:.3f} | {:.3f} ".format(
                                                                                     epoch, train_loss, val_loss, err_rmse, err_psnr,
                                                                                     train_mask_loss, val_mask_loss))
         
