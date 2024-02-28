@@ -201,15 +201,6 @@ if __name__ == '__main__':
                                         upper = row * 512
                                         fullout.paste(tile, (left, upper)) # 此处更改为接缝处理算法！！
                                         wandb.log({"prediction_epoch{}_{}".format(epoch, idx): [wandb.Image(fullout)]})
-                                        # A_img_numpy = A_img.cpu().numpy()  AB_mask_numpy = AB_mask.cpu().numpy()  orig = Image.fromarray(A_img_numpy[0])  msk = Image.fromarray(AB_mask_numpy[0])
-                                        # B_img_numpy = B_img.cpu().numpy()
-                                        # albedo = Image.fromarray(B_img_numpy[0].astype(np.uint8))
-                                        # albedo = Image.fromarray(B_img_numpy[0].astype(np.uint8))
-                                        # images = [
-                                        #     wandb.Image(albedo, caption="albedo"),
-                                        #     wandb.Image(fullout, caption="prediction"),
-                                        # ]
-                                        # wandb.log({"outputs": images})
                                     
                             synthetic_mask = compute_shadow_mask_otsu(inp, out.clone().detach())
                             mask_loss = criterion_pixelwise(synthetic_mask, mask)
