@@ -25,8 +25,8 @@ if __name__ == '__main__':
 
     parser.add_argument("--optimizer", type=str, default="adam", help="['adam']adam ['sgd']sgd")
     parser.add_argument("--lr", type=float, default=0.0002, help="adam: learning rate")
-    parser.add_argument("--b1", type=float, default=0.5, help="adam: decay of first order momentum of gradient")
-    parser.add_argument("--b2", type=float, default=0.999, help="adam: decay of first order momentum of gradient")
+    parser.add_argument("--b1", type=float, default=0.9, help="adam: decay of first order momentum of gradient") # GPT说常默认0.9
+    parser.add_argument("--b2", type=float, default=0.999, help="adam: decay of first order momentum of gradient") # GPT说常默认0.999
     parser.add_argument("--gamma", type=float, default=0.2, help="adam: 学习率衰减的乘数")
 
     parser.add_argument("--decay_epoch", type=int, default=8, help="epoch from which to start lr decay")
