@@ -9,7 +9,7 @@ project:  DNSR-MaterialData
 
 # Metric to optimize
 metric:
-  name: best_rmse
+  name: err_rmse
   goal: minimize
 
 # Parameters space to search
