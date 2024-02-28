@@ -92,8 +92,6 @@ if __name__ == '__main__':
     wandb.define_metric("val/*", step_metric="Epoch")
     wandb.define_metric("main/*", step_metric="Epoch")
     wandb.define_metric("main/rmse", summary="min")
-    # wandb.define_metric("err/*", step_metric="Epoch")
-    # wandb.define_metric("train/loss", summary="min")
     # best_rmse = 600
         
     for epoch in range(opt.resume_epoch, opt.n_epochs):
