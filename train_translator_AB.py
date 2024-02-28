@@ -217,9 +217,9 @@ if __name__ == '__main__':
                             err_rmse += rmse
                             err_psnr += psnr
 
-        table_data.append([epoch, train_loss, val_loss])
-        table = wandb.Table(data=table_data, columns=["Epoch", "train_loss", "val_loss"])
-        table_line = wandb.plot.line(table, x='Epoch', y1='train_loss',  y2='val_loss', title='Train vs. Val Loss')
+        # table_data.append([epoch, train_loss, val_loss])
+        # table = wandb.Table(data=table_data, columns=["Epoch", "train_loss", "val_loss"])
+        # table_line = wandb.plot.line(table, x='Epoch', y1='train_loss',  y2='val_loss', title='Train vs. Val Loss')
         wandb.log({
              # "val/loss": val_loss,
              "val/mask_loss": val_mask_loss,
@@ -227,9 +227,10 @@ if __name__ == '__main__':
              "val/perc_loss": val_perc_loss,
              "main/rmse": err_rmse,
              "main/psnr": err_psnr,
-             "main/Train vs. Val Loss": table_line, 
+             # "main/Train vs. Val Loss": table_line, 
              "Epoch": epoch
         })
+        wandb.log({"main/Train vs. Val Loss": wandb.plot.pr_curve(train_loss, val_loss)})
 
         print("EPOCH{}  -  LOSS: {:.3f} | {:.3f}  -  RMSE {:.3f}  -  PSNR {:.3f}  -  MskLoss: {:.3f} | {:.3f} ".format(
                                                                                     epoch, train_loss, val_loss, err_rmse, err_psnr,
