@@ -1,0 +1,31 @@
+# The program to run
+program: train_translator_AB.py
+
+# Grid, random or bayes
+method: random
+
+# Project this sweep is part of
+project:  DNSR-MaterialData
+
+# Metric to optimize
+metric:
+  name: err_rmse
+  goal: minimize
+
+# Parameters space to search
+parameters:
+  optimizer:                              
+  	values: ['adam', 'sgd']
+  lr:
+  	values: [0.1, 0.001, 0.0001, 0.00001]  # 先确定量级
+  batch_size: 
+    distribution: q_log_uniform_values
+    q: 2
+    min: 2
+    max: 64  # 先确定可用batchsize的范围
+  n_epochs:
+    value: 80  # 第一批先固定值
+
+
+
+
