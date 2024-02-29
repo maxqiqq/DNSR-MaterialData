@@ -93,8 +93,7 @@ if __name__ == '__main__':
     # val_samples = len(val_dataloader)
     
     wandb.define_metric("Epoch")
-    wandb.define_metric("train/*", step_metric="Epoch")
-    wandb.define_metric("val/*", step_metric="Epoch")
+    wandb.define_metric("loss/*", step_metric="Epoch")
     wandb.define_metric("main/*", step_metric="Epoch")
     wandb.define_metric("main/val_rmse", summary="min")
     # best_rmse = 600
@@ -156,9 +155,9 @@ if __name__ == '__main__':
         
         wandb.log({
              "main/train_loss": train_loss,
-             "train/mask_loss": train_mask_loss,
-             "train/pix_loss": train_pix_loss,
-             "train/perc_loss": train_perc_loss,
+             "loss/train_mask_loss": train_mask_loss,
+             "loss/train_pix_loss": train_pix_loss,
+             "loss/train_perc_loss": train_perc_loss,
              "Epoch": epoch
          })
 
@@ -224,9 +223,9 @@ if __name__ == '__main__':
         # table_line = wandb.plot.line(table, x='Epoch', y1='train_loss',  y2='val_loss', title='Train vs. Val Loss')
         wandb.log({
              "main/val_loss": val_loss,
-             "val/mask_loss": val_mask_loss,
-             "val/pix_loss": val_pix_loss,
-             "val/perc_loss": val_perc_loss,
+             "loss/val_mask_loss": val_mask_loss,
+             "loss/val_pix_loss": val_pix_loss,
+             "loss/val_perc_loss": val_perc_loss,
              "main/val_rmse": err_rmse,
              "main/val_psnr": err_psnr,
              # "main/Train vs. Val Loss": table_line
