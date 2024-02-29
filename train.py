@@ -14,7 +14,7 @@ from torchvision import transforms
 import numpy as np
 import wandb
 
-os.environ['TORCH_HOME'] = "./loaded_models/"
+os.environ['TORCH_HOME'] = "C:/Users/Raytrack/Desktop/mxq-2.29/"
 
 if __name__ == '__main__':
     # parse CLI arguments
@@ -32,7 +32,7 @@ if __name__ == '__main__':
     parser.add_argument("--decay_epoch", type=int, default=20, help="epoch from which to start lr decay")
     parser.add_argument("--decay_steps", type=int, default=5, help="number of step decays")
 
-    parser.add_argument("--n_cpu", type=int, default=16, help="number of cpu threads to use during batch generation")  # 也要改一下，租的GPU
+    parser.add_argument("--n_cpu", type=int, default=24, help="number of cpu threads to use during batch generation")  # 也要改一下，租的GPU
     parser.add_argument("--channels", type=int, default=3, help="number of image channels")
 
     parser.add_argument("--pixelwise_weight", type=float, default=1.0, help="Pixelwise loss weight")
@@ -54,7 +54,7 @@ if __name__ == '__main__':
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
     translator = DistillNet(num_iblocks=6, num_ops=4)  # 用了现有结构的.pth, 不能改6和4，除非UNet
-    translator.load_state_dict(torch.load("./loaded_models/gen_sh2f_mapped.pth"))
+    translator.load_state_dict(torch.load("C:/Users/Raytrack/Desktop/mxq-2.29/gen_sh2f_mapped.pth"))
     translator = translator.to(device)
       
     print("USING CUDA FOR MODEL TRAINING")
@@ -72,8 +72,8 @@ if __name__ == '__main__':
    
     Tensor = torch.cuda.FloatTensor
 
-    train_set = PairedImageSet('./MaterialData', 'train', use_mask=False, aug=False)
-    val_set = PairedImageSet('./MaterialData', 'validation', use_mask=False, aug=False)
+    train_set = PairedImageSet('C:/Users/Raytrack/Desktop/mxq-2.29/MaterialData-sweep', 'train', use_mask=False, aug=False)
+    val_set = PairedImageSet('C:/Users/Raytrack/Desktop/mxq-2.29/MaterialData-sweep', 'validation', use_mask=False, aug=False)
 
     dataloader = DataLoader(
         train_set,  
