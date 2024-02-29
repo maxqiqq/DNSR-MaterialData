@@ -1,8 +1,8 @@
 # The program to run
-program: train_translator_AB.py
+program: train.py
 
 # Grid, random or bayes
-method: random
+method: bayes
 
 # Project this sweep is part of
 project:  DNSR-MaterialData
@@ -24,7 +24,7 @@ parameters:
     min: 2
     max: 64  # 先确定可用batchsize的范围
   n_epochs:
-    value: 80  # 第一批先固定值
+    value: 60  # 第一批先固定值
 
 
 
