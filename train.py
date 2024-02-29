@@ -96,7 +96,7 @@ if __name__ == '__main__':
     wandb.define_metric("train/*", step_metric="Epoch")
     wandb.define_metric("val/*", step_metric="Epoch")
     wandb.define_metric("main/*", step_metric="Epoch")
-    wandb.define_metric("main/rmse", summary="min")
+    wandb.define_metric("main/val_rmse", summary="min")
     # best_rmse = 600
         
     for epoch in range(opt.resume_epoch, opt.n_epochs):
@@ -227,9 +227,9 @@ if __name__ == '__main__':
              "val/mask_loss": val_mask_loss,
              "val/pix_loss": val_pix_loss,
              "val/perc_loss": val_perc_loss,
-             "main/rmse": err_rmse,
-             "main/psnr": err_psnr,
-             # "main/Train vs. Val Loss": table_line, 
+             "main/val_rmse": err_rmse,
+             "main/val_psnr": err_psnr,
+             # "main/Train vs. Val Loss": table_line
              "Epoch": epoch
         })
 
